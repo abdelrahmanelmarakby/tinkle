@@ -1,0 +1,33 @@
+name: tinkle
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: '>=2.15.0 <3.0.0'
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  dio: ^4.0.4
+  dio_logger: ^4.0.8+8
+  ease: ^0.0.10
+  firebase_core: ^1.12.0
+  firebase_messaging: ^11.2.6
+  flutter:
+    sdk: flutter
+  get: 4.6.1
+  get_storage: ^2.0.3
+  google_fonts: any
+  overlay_support: ^1.2.1
+  pin_code_fields: ^7.3.0
+  platform_device_id: ^1.0.1
+  sentry_flutter: ^6.3.0
+
+dev_dependencies:
+  flutter_lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

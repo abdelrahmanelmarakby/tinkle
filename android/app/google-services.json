@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "501156011236",
+    "project_id": "tinkle-3c94e",
+    "storage_bucket": "tinkle-3c94e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501156011236:android:57fa48b2c9955b82c660f1",
+        "android_client_info": {
+          "package_name": "com.together.tinkle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501156011236-vc31lt1j6o72d93ngnkvhitf547rikej.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.together.tinkle",
+            "certificate_hash": "33470096df70dbc1829d1912a6b03c06a28d89e2"
+          }
+        },
+        {
+          "client_id": "501156011236-qogfordqkosjh5ubor3c8o2mtg6g7f7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuVwWDUtTtqWUGalvqpJp-PamrI8KiLCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501156011236-qogfordqkosjh5ubor3c8o2mtg6g7f7g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
