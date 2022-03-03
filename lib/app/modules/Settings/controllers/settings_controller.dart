@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:tinkle/app/data/api/Settings_Apis.dart';
 
 class SettingsController extends GetxController {
   //first page variables
@@ -53,19 +54,15 @@ class SettingsController extends GetxController {
     "Damietta",
     "Asyut",
   ];
+  List<String> areas = [];
 //third page variables
   TextEditingController phone = TextEditingController();
 
   var isLoading = false.obs;
-  var verId = '';
-  var authStatus = ''.obs;
-  bool isPhoneOk = false;
   final otp = TextEditingController();
-
-  var onTapRecognizer;
-
-  StreamController<ErrorAnimationType>? errorController;
-
-  RxBool hasError = false.obs;
-  RxString currentText = "".obs;
+  Future getData() async {
+    countries = await SettingsAPI.getCountries() as List<String>;
+    cities = SettingsAPI.getCities() as List<String>;
+    areas = SettingsAPI.getAreas() as List<String>;
+  }
 }

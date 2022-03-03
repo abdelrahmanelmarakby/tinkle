@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:tinkle/app/data/api/Settings_Apis.dart';
-import 'package:tinkle/app/modules/otp/views/otp_view.dart';
+import 'package:tinkle/app/modules/home/views/home_view.dart';
 import 'package:tinkle/core/const.dart';
 import 'package:tinkle/core/utils/values_manger.dart';
 
 import '../controllers/settings_controller.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class SettingsView extends GetView<SettingsController> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -223,16 +224,21 @@ class PhoneNumberPage extends StatelessWidget {
                                             MediaQuery.of(context).size.width,
                                             64)),
                                     onPressed: () async {
-                                      sendOtp(
+                                      SettingsAPI.sendOtp(
                                               phoneNumber:
                                                   settingsController.phone.text)
                                           .then((value) {
                                         settingsController.pageController
-                                            .animateToPage(2,
+                                            .animateToPage(
+                                                settingsController
+                                                        .pageController.page!
+                                                        .toInt() +
+                                                    1,
                                                 duration:
                                                     Duration(milliseconds: 250),
                                                 curve: Curves.easeInOut);
                                       });
+                                      await SmsAutoFill().listenForCode;
                                     },
                                     child: EaseTxt(
                                       "Send verification code",
@@ -299,115 +305,24 @@ class VerifyCodePage extends StatelessWidget {
               height: 20,
             ),
             Form(
-              //key: formKey,
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
-                  child: Obx(
-                    () => PinCodeTextField(
-                      appContext: context,
-                      enablePinAutofill: true,
-                      autoDismissKeyboard: true,
-                      autoFocus: true,
-                      enabled: true,
-                      hapticFeedbackTypes: HapticFeedbackTypes.medium,
-                      useHapticFeedback: true,
-                      pastedTextStyle: TextStyle(
-                        color: Colors.green.shade600,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      length: 6,
-                      obscureText: false,
-                      obscuringCharacter: '*',
-                      animationType: AnimationType.slide,
-                      validator: (v) {
-                        if (v!.length < 3) {
-                          return "Please fill the fields to continue";
-                        } else {
-                          return null;
-                        }
-                      },
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: 60,
-                        fieldWidth: 50,
-                        activeColor: Colors.blue.shade600,
-                        selectedFillColor: Colors.white.withOpacity(.5),
-                        selectedColor: Colors.white.withOpacity(.5),
-                        disabledColor: Colors.white.withOpacity(.5),
-                        activeFillColor: controller.hasError.value
-                            ? Colors.orange
-                            : Colors.white,
-                      ),
-                      cursorColor: Colors.black,
-                      animationDuration: Duration(milliseconds: 300),
-                      textStyle: TextStyle(fontSize: 20, height: 1.6),
-
-                      enableActiveFill: true,
-                      errorAnimationController: controller.errorController,
+                //key: formKey,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 30),
+                    child: PinFieldAutoFill(
                       controller: controller.otp,
-                      keyboardType: TextInputType.number,
-                      boxShadows: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          color: Colors.black12,
-                          blurRadius: 10,
-                        )
-                      ],
-                      onCompleted: (v) {
-                        print("Completed");
-                      },
-                      // onTap: () {
-                      //   print("Pressed");
-                      // },
-                      onChanged: (value) {
-                        print(value);
-
-                        controller.currentText.value = value;
-                      },
-                      beforeTextPaste: (text) {
-                        print("Allowing to paste $text");
-                        //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                        //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                        return true;
-                      },
-                    ),
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Text(
-                controller.hasError.value
-                    ? "*Please fill up all the cells properly"
-                    : "",
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                  text: "Didn't receive the code? ",
-                  style: TextStyle(color: Colors.black54, fontSize: 15),
-                  children: [
-                    TextSpan(
-                        text: " RESEND",
-                        recognizer: controller.onTapRecognizer,
-                        style: TextStyle(
-                            color: Color(0xFF91D3B3),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16))
-                  ]),
-            ),
-            SizedBox(
-              height: 14,
-            ),
+                      autoFocus: true,
+                      enableInteractiveSelection: true,
+                      codeLength: 6,
+                      decoration: UnderlineDecoration(
+                          errorText: "Invalid code",
+                          bgColorBuilder: FixedColorBuilder(Colors.white30),
+                          colorBuilder: FixedColorBuilder(Colors.white),
+                          textStyle: GoogleFonts.tajawal(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    ))),
             Container(
               margin:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
@@ -415,16 +330,9 @@ class VerifyCodePage extends StatelessWidget {
                 height: 50,
                 child: TextButton(
                   onPressed: () async {
-                    // formKey.currentState!.validate();
-                    // conditions for validating
-                    /* if (controller.currentText.value.length != 6 ||
-                        await controller
-                                .otpVerify(controller.currentText.value) !=
-                            false) {
-                      controller.errorController!.add(ErrorAnimationType
-                          .shake); // Triggering error shake animation
-                      controller.hasError.value = true;
-                    } else {}*/
+                    SettingsAPI.verifyOtp(
+                        phoneNumber: controller.phone.text,
+                        otpCode: controller.otp.text);
                   },
                   child: Center(
                       child: Text(
@@ -441,35 +349,15 @@ class VerifyCodePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.green.shade100,
+                        color: Colors.black.withOpacity(.1),
                         offset: Offset(1, -2),
                         blurRadius: 5),
                     BoxShadow(
-                        color: Colors.green.shade100,
+                        color: Colors.black.withOpacity(.1),
                         offset: Offset(-1, 2),
                         blurRadius: 5)
                   ]),
             ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                TextButton(
-                  child: Text("Clear"),
-                  onPressed: () {
-                    controller.otp.clear();
-                  },
-                ),
-                TextButton(
-                  child: Text("Set Text"),
-                  onPressed: () {
-                    controller.otp.text = "123456";
-                  },
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -483,95 +371,105 @@ class CityAreaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    settingsController.city.value = settingsController.cities[0];
-    settingsController.country.value = settingsController.countries[0];
+    settingsController.city.value = settingsController.cities[0].toString();
+    settingsController.country.value =
+        settingsController.countries[0].toString();
     return SafeArea(
-      child: SingleChildScrollView(
-          child: Column(children: [
-        const SizedBox(height: AppSize.size20),
-        Image.asset(logo),
-        const SizedBox(height: AppSize.size20 * 2),
-        const Center(
-          child: EaseTxt(
-            "Get offers from",
-            size: AppSize.size12 * 2,
-          ),
-        ),
-        //Drop Down menu for city
-        Obx(
-          () => DropdownButton<String>(
-            value: settingsController.city.value,
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.white,
-            ),
-            iconSize: 24,
-            elevation: 16,
-            style: GoogleFonts.tajawal(
-                color: Colors.red, fontWeight: FontWeight.w600),
-            underline: Container(
-              height: 2,
-              color: Colors.white,
-            ),
-            items: settingsController.cities.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              settingsController.city.value = newValue!;
-            },
-          ),
-        ),
-        SizedBox(height: AppSize.size20),
-        //Drop Down menu for countries
-        Obx(
-          () => DropdownButton<String>(
-            value: settingsController.country.value,
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.white,
-            ),
-            iconSize: 24,
-            elevation: 16,
-            style: TextStyle(color: Colors.red),
-            underline: Container(
-              height: 2,
-              color: Colors.white,
-            ),
-            items: settingsController.countries.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              settingsController.country.value = newValue!;
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(AppPadding.padding18),
-          child: SizedBox(
-            height: 48,
-            width: double.infinity,
-            child: TextButton(
-                style: TextButton.styleFrom(backgroundColor: Colors.white),
-                onPressed: () => settingsController.pageController
-                    .animateToPage(2,
-                        duration: Duration(milliseconds: 250),
-                        curve: Curves.easeInOut),
-                child: EaseTxt(
-                  "Next",
-                  color: Colors.blue,
-                  size: 18,
-                  weight: FontWeight.bold,
-                  textAlign: TextAlign.start,
-                )),
-          ),
-        ),
-      ])),
+      child: FutureBuilder(
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                  child: Column(children: [
+                const SizedBox(height: AppSize.size20),
+                Image.asset(logo),
+                const SizedBox(height: AppSize.size20 * 2),
+                const Center(
+                  child: EaseTxt(
+                    "Get offers from",
+                    size: AppSize.size12 * 2,
+                  ),
+                ),
+                //Drop Down menu for city
+                Obx(
+                  () => DropdownButton<String>(
+                    value: settingsController.city.value,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white,
+                    ),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: GoogleFonts.tajawal(
+                        color: Colors.red, fontWeight: FontWeight.w600),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.white,
+                    ),
+                    items: settingsController.cities.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      settingsController.city.value = newValue!;
+                    },
+                  ),
+                ),
+                SizedBox(height: AppSize.size20),
+                //Drop Down menu for countries
+                Obx(
+                  () => DropdownButton<String>(
+                    value: settingsController.country.value,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white,
+                    ),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.red),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.white,
+                    ),
+                    items: settingsController.countries.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      settingsController.country.value = newValue!;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppPadding.padding18),
+                  child: SizedBox(
+                    height: 48,
+                    width: double.infinity,
+                    child: TextButton(
+                        style:
+                            TextButton.styleFrom(backgroundColor: Colors.white),
+                        onPressed: () => settingsController.pageController
+                            .animateToPage(2,
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.easeInOut),
+                        child: EaseTxt(
+                          "Next",
+                          color: Colors.blue,
+                          size: 18,
+                          weight: FontWeight.bold,
+                          textAlign: TextAlign.start,
+                        )),
+                  ),
+                ),
+              ]));
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+          future: settingsController.getData()),
     );
   }
 }
