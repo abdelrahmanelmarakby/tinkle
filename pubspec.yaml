@@ -14,6 +14,8 @@ dependencies:
   firebase_messaging: ^11.2.6
   flutter:
     sdk: flutter
+  flutter_launcher_icons: any
+  flutter_native_splash: any
   get: 4.6.1
   get_storage: ^2.0.3
   google_fonts: any
@@ -23,10 +25,17 @@ dependencies:
   sentry_flutter: ^6.3.0
 
 dev_dependencies:
+  alt_sms_autofill: ^1.0.0
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
   sms_autofill: ^2.2.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/logo.png"
 
 flutter:
   uses-material-design: true

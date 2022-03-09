@@ -1,5 +1,6 @@
 import 'package:ease/ease.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +9,7 @@ import 'package:tinkle/app/data/api/Settings_Apis.dart';
 import 'package:tinkle/app/modules/home/views/home_view.dart';
 import 'package:tinkle/core/const.dart';
 import 'package:tinkle/core/utils/values_manger.dart';
-
+import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import '../controllers/settings_controller.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -261,9 +262,43 @@ class PhoneNumberPage extends StatelessWidget {
   }
 }
 
-class VerifyCodePage extends StatelessWidget {
+class VerifyCodePage extends StatefulWidget {
   VerifyCodePage({Key? key}) : super(key: key);
+
+  @override
+  State<VerifyCodePage> createState() => _VerifyCodePageState();
+}
+
+class _VerifyCodePageState extends State<VerifyCodePage> {
   final SettingsController controller = Get.find();
+  RxString _comingSms = 'Unknown'.obs;
+
+  Future<void> initSmsListener() async {
+    String? comingSms;
+    try {
+      comingSms = await AltSmsAutofill().listenForSms;
+    } on PlatformException {
+      comingSms = 'Failed to get Sms.';
+    }
+
+    _comingSms.value = comingSms!;
+    print("====>Message: ${_comingSms}");
+    print("${_comingSms.value[32]}");
+    controller.otp.text = _comingSms.value[20] +
+        _comingSms.value[21] +
+        _comingSms.value[22] +
+        _comingSms.value[23] +
+        _comingSms.value[24] +
+        _comingSms.value[
+            25]; //used to set the code in the message to a string and setting it to a textcontroller. message length is 38. so my code is in string index 32-37.
+  }
+
+  @override
+  void initState() {
+    initSmsListener();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -307,22 +342,52 @@ class VerifyCodePage extends StatelessWidget {
             Form(
                 //key: formKey,
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 30),
-                    child: PinFieldAutoFill(
-                      controller: controller.otp,
-                      autoFocus: true,
-                      enableInteractiveSelection: true,
-                      codeLength: 6,
-                      decoration: UnderlineDecoration(
-                          errorText: "Invalid code",
-                          bgColorBuilder: FixedColorBuilder(Colors.white30),
-                          colorBuilder: FixedColorBuilder(Colors.white),
-                          textStyle: GoogleFonts.tajawal(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                    ))),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+              child: PinCodeTextField(
+                appContext: context,
+                pastedTextStyle: TextStyle(
+                  color: Colors.green.shade600,
+                  fontWeight: FontWeight.bold,
+                ),
+                length: 6,
+                obscureText: false,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(10),
+                    fieldHeight: 50,
+                    fieldWidth: 40,
+                    inactiveFillColor: Colors.white,
+                    inactiveColor: Colors.grey.shade200,
+                    selectedColor: Colors.grey.shade200,
+                    selectedFillColor: Colors.white,
+                    activeFillColor: Colors.white,
+                    activeColor: Colors.grey.shade200),
+                cursorColor: Colors.black,
+                textStyle: GoogleFonts.tajawal(color: Colors.blue.shade900),
+                animationDuration: Duration(milliseconds: 300),
+                enableActiveFill: true,
+                controller: controller.otp,
+                keyboardType: TextInputType.number,
+                boxShadows: [
+                  BoxShadow(
+                    offset: Offset(0, 1),
+                    color: Colors.black12,
+                    blurRadius: 10,
+                  )
+                ],
+                onCompleted: (v) {
+                  //do something or move to next screen when code complete
+                },
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    print('$value');
+                  });
+                },
+              ),
+            )),
             Container(
               margin:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
@@ -451,10 +516,7 @@ class CityAreaPage extends StatelessWidget {
                     child: TextButton(
                         style:
                             TextButton.styleFrom(backgroundColor: Colors.white),
-                        onPressed: () => settingsController.pageController
-                            .animateToPage(2,
-                                duration: Duration(milliseconds: 250),
-                                curve: Curves.easeInOut),
+                        onPressed: () => Get.offAll(() => HomeView()),
                         child: EaseTxt(
                           "Next",
                           color: Colors.blue,

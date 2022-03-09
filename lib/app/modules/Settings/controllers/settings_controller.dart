@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import 'package:tinkle/app/data/api/Settings_Apis.dart';
 
 class SettingsController extends GetxController {
@@ -59,10 +59,27 @@ class SettingsController extends GetxController {
   TextEditingController phone = TextEditingController();
 
   var isLoading = false.obs;
-  final otp = TextEditingController();
-  Future getData() async {
-    countries = await SettingsAPI.getCountries() as List<String>;
-    cities = SettingsAPI.getCities() as List<String>;
-    areas = SettingsAPI.getAreas() as List<String>;
+  TextEditingController otp = TextEditingController();
+  Future<int> getData() async {
+    return 0;
+    await SettingsAPI()
+        .getCountries()
+        .then((value) => countries = value as List<String>);
+    await SettingsAPI()
+        .getCities()
+        .then((value) => cities = value as List<String>);
+    await SettingsAPI()
+        .getAreas()
+        .then((value) => areas = value as List<String>);
+    return 0;
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    phone.dispose();
+    otp.dispose();
+
+    super.dispose();
   }
 }

@@ -6,7 +6,7 @@ import 'color_manger.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
     //main colors of the app
-    scaffoldBackgroundColor: Color(0xff045681),
+    scaffoldBackgroundColor: Colors.white,
     primaryColor: ColorsManger.primary,
     primaryColorLight: ColorsManger.primary.withOpacity(.7),
     primaryColorDark: ColorsManger.primaryDark,
