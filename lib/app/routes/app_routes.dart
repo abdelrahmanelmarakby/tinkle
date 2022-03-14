@@ -5,14 +5,14 @@ abstract class Routes {
   Routes._();
 
   static const HOME = _Paths.HOME;
-  static const OTP = _Paths.OTP;
   static const SETTINGS = _Paths.SETTINGS;
   static const OFFERS = _Paths.OFFERS;
+  static const CATEGORIES = _Paths.CATEGORIES;
 }
 
 abstract class _Paths {
   static const HOME = '/home';
-  static const OTP = '/otp';
   static const SETTINGS = '/settings';
   static const OFFERS = '/offers';
+  static const CATEGORIES = '/categories';
 }

@@ -1,12 +1,12 @@
-class CountryModel {
+class CompanyModel {
   List<Data>? data;
   bool? status;
   dynamic error;
   int? statusCode;
 
-  CountryModel({this.data, this.status, this.error, this.statusCode});
+  CompanyModel({this.data, this.status, this.error, this.statusCode});
 
-  CountryModel.fromJson(Map<String, dynamic> json) {
+  CompanyModel.fromJson(Map<String, dynamic> json) {
     if (json["data"] is List)
       this.data = json["data"] == null
           ? null
@@ -30,16 +30,24 @@ class CountryModel {
 class Data {
   int? id;
   String? title;
-  int? code;
+  String? logo;
+  int? categoryId;
   String? createdAt;
   String? updatedAt;
 
-  Data({this.id, this.title, this.code, this.createdAt, this.updatedAt});
+  Data(
+      {this.id,
+      this.title,
+      this.logo,
+      this.categoryId,
+      this.createdAt,
+      this.updatedAt});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) this.id = json["id"];
     if (json["title"] is String) this.title = json["title"];
-    if (json["code"] is int) this.code = json["code"];
+    if (json["logo"] is String) this.logo = json["logo"];
+    if (json["categoryId"] is int) this.categoryId = json["categoryId"];
     if (json["created_at"] is String) this.createdAt = json["created_at"];
     if (json["updated_at"] is String) this.updatedAt = json["updated_at"];
   }
@@ -48,7 +56,8 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data["id"] = this.id;
     data["title"] = this.title;
-    data["code"] = this.code;
+    data["logo"] = this.logo;
+    data["categoryId"] = this.categoryId;
     data["created_at"] = this.createdAt;
     data["updated_at"] = this.updatedAt;
     return data;

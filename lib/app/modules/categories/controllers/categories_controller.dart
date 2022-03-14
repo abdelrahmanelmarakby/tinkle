@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
-class OtpController extends GetxController {
-  //TODO: Implement OtpController
-
+class CategoriesController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:tinkle/app/data/api/Settings_Apis.dart';
+import 'package:tinkle/app/data/api/settings_apis.dart';
 import 'package:tinkle/app/modules/home/views/home_view.dart';
 import 'package:tinkle/core/const.dart';
 import 'package:tinkle/core/utils/values_manger.dart';

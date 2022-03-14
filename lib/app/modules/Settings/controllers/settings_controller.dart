@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:alt_sms_autofill/alt_sms_autofill.dart';
-import 'package:tinkle/app/data/api/Settings_Apis.dart';
+import 'package:tinkle/app/data/api/settings_apis.dart';
 
 class SettingsController extends GetxController {
   //first page variables
@@ -61,16 +58,14 @@ class SettingsController extends GetxController {
   var isLoading = false.obs;
   TextEditingController otp = TextEditingController();
   Future<int> getData() async {
-    return 0;
-    await SettingsAPI()
-        .getCountries()
-        .then((value) => countries = value as List<String>);
-    await SettingsAPI()
-        .getCities()
-        .then((value) => cities = value as List<String>);
-    await SettingsAPI()
-        .getAreas()
-        .then((value) => areas = value as List<String>);
+    Future.wait([
+      SettingsAPI()
+          .getCountries()
+          .then((value) => countries = value as List<String>),
+      SettingsAPI().getCities().then((value) => cities = value as List<String>),
+      SettingsAPI().getAreas().then((value) => areas = value as List<String>)
+    ]);
+
     return 0;
   }
 

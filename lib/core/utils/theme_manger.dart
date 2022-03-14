@@ -26,52 +26,52 @@ ThemeData getApplicationTheme() {
       headline1: GoogleFonts.tajawal(
         fontSize: AppSize.size12 * 2,
         fontWeight: FontWeight.normal,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       bodyText1: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.normal,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       bodyText2: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.normal,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       headline2: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       headline3: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       headline4: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       headline5: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       headline6: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       subtitle1: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
       subtitle2: GoogleFonts.tajawal(
         fontSize: AppSize.size16,
         fontWeight: FontWeight.bold,
-        color: ColorsManger.white,
+        color: ColorsManger.primary,
       ),
     ),
   );

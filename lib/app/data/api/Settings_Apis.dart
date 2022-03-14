@@ -1,9 +1,10 @@
 //get all cities from the api and save them in the list of cities
-import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tinkle/app/data/models/area_model.dart';
+import 'package:tinkle/app/data/models/cities_model.dart';
 import 'package:tinkle/app/data/models/country_model.dart';
 import 'package:dio_logger/dio_logger.dart';
 
@@ -38,7 +39,7 @@ class SettingsAPI {
       final response = await dio.post(
         "https://egyptsystem.com/api/citys",
       );
-      final parsed = CountryModel.fromJson(response.data);
+      final parsed = CityModel.fromJson(response.data);
       return parsed.data!.map((e) => e.title).toList();
     } on DioError catch (e) {
       Get.snackbar(
@@ -59,7 +60,7 @@ class SettingsAPI {
       final response = await dio.post(
         "https://egyptsystem.com/api/areas",
       );
-      final parsed = CountryModel.fromJson(response.data);
+      final parsed = AreaModel.fromJson(response.data);
       return parsed.data!.map((e) => e.title).toList();
     } on DioError catch (e) {
       Get.snackbar(

@@ -1,7 +1,7 @@
 class AreaModel {
   List<Data>? data;
   bool? status;
-  dynamic? error;
+  dynamic error;
   int? statusCode;
 
   AreaModel({this.data, this.status, this.error, this.statusCode});

@@ -1,7 +1,7 @@
 class CityModel {
   List<Data>? data;
   bool? status;
-  dynamic? error;
+  dynamic error;
   int? statusCode;
 
   CityModel({this.data, this.status, this.error, this.statusCode});
