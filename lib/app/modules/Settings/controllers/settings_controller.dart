@@ -12,8 +12,9 @@ class SettingsController extends GetxController {
 //second page variables
   late RxString city = "".obs;
   late RxString country = "".obs;
+  late RxString area = "".obs;
   //list of countries
-  List<String> countries = [
+  RxList<String> countries = [
     "Egypt",
     "United States",
     "United Kingdom",
@@ -27,10 +28,10 @@ class SettingsController extends GetxController {
     "Qatar",
     "Bahrain",
     "Jordan",
-  ];
+  ].obs;
 
   //list of cities in egypt
-  List<String> cities = [
+  RxList<String> cities = [
     "Cairo",
     "Alexandria",
     "Giza",
@@ -50,31 +51,15 @@ class SettingsController extends GetxController {
     "Zagazig",
     "Damietta",
     "Asyut",
-  ];
-  List<String> areas = [];
+  ].obs;
+  RxList<String> areas = ["mansoura"].obs;
 //third page variables
   TextEditingController phone = TextEditingController();
 
   var isLoading = false.obs;
   TextEditingController otp = TextEditingController();
-  Future<int> getData() async {
-    Future.wait([
-      SettingsAPI()
-          .getCountries()
-          .then((value) => countries = value as List<String>),
-      SettingsAPI().getCities().then((value) => cities = value as List<String>),
-      SettingsAPI().getAreas().then((value) => areas = value as List<String>)
-    ]);
-
+  Future getData() async {
+    Future.delayed(Duration(seconds: 5));
     return 0;
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    phone.dispose();
-    otp.dispose();
-
-    super.dispose();
   }
 }

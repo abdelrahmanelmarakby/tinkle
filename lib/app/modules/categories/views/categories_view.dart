@@ -1,3 +1,4 @@
+import 'package:ease/ease.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -18,7 +19,10 @@ class CategoriesView extends GetView<CategoriesController> {
             CategoriesModel? categories = snapshot.data;
             return ListView.builder(
               itemCount: categories!.data!.length,
-              itemBuilder: (context, index) => CategoryListItem(),
+              itemBuilder: (context, index) => CategoryListItem(
+                name: categories.data![index].title ?? "N/A",
+                ImageUrl: categories.data![index].logo ?? "N/A",
+              ),
             );
           } else {
             return Center(
@@ -32,10 +36,19 @@ class CategoriesView extends GetView<CategoriesController> {
 }
 
 class CategoryListItem extends StatelessWidget {
-  const CategoryListItem({Key? key}) : super(key: key);
+  const CategoryListItem({Key? key, this.name = "", this.ImageUrl = ""})
+      : super(key: key);
 
+  final String name;
+  final String ImageUrl;
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListTile(
+      title: EaseTxt(name),
+      trailing: Image.network(ImageUrl),
+      onTap: () {
+        Get.toNamed('/category');
+      },
+    );
   }
 }

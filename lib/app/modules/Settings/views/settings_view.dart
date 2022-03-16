@@ -8,6 +8,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:tinkle/app/data/api/settings_apis.dart';
 import 'package:tinkle/app/modules/home/views/home_view.dart';
 import 'package:tinkle/core/const.dart';
+import 'package:tinkle/core/global.dart';
+import 'package:tinkle/core/utils/color_manger.dart';
+import 'package:tinkle/core/utils/font_manger.dart';
+import 'package:tinkle/core/utils/styles_manger.dart';
 import 'package:tinkle/core/utils/values_manger.dart';
 import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import '../controllers/settings_controller.dart';
@@ -21,6 +25,7 @@ class SettingsView extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorsManger.primary,
       key: scaffoldKey,
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -395,9 +400,26 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                 height: 50,
                 child: TextButton(
                   onPressed: () async {
-                    SettingsAPI.verifyOtp(
+                    final bool isVerified = await SettingsAPI.verifyOtp(
                         phoneNumber: controller.phone.text,
                         otpCode: controller.otp.text);
+                    if (isVerified) {
+                      controller.pageController.animateToPage(
+                          controller.pageController.page!.toInt() + 1,
+                          duration: Duration(milliseconds: 250),
+                          curve: Curves.easeInOut);
+                    } else {
+                      Get.snackbar(
+                        "Error",
+                        "Wrong OTP code",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        borderRadius: 10,
+                        margin: EdgeInsets.all(10),
+                        snackStyle: SnackStyle.FLOATING,
+                        animationDuration: Duration(seconds: 4),
+                      );
+                    }
                   },
                   child: Center(
                       child: Text(
@@ -454,58 +476,100 @@ class CityAreaPage extends StatelessWidget {
                     size: AppSize.size12 * 2,
                   ),
                 ),
-                //Drop Down menu for city
-                Obx(
-                  () => DropdownButton<String>(
-                    value: settingsController.city.value,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: GoogleFonts.tajawal(
-                        color: Colors.red, fontWeight: FontWeight.w600),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.white,
-                    ),
-                    items: settingsController.cities.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      settingsController.city.value = newValue!;
-                    },
-                  ),
-                ),
-                SizedBox(height: AppSize.size20),
-                //Drop Down menu for countries
-                Obx(
-                  () => DropdownButton<String>(
-                    value: settingsController.country.value,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.red),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.white,
-                    ),
-                    items: settingsController.countries.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      settingsController.country.value = newValue!;
-                    },
+                //dropdown for country
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    children: [
+                      Obx(
+                        () => DropdownButton<String>(
+                          isExpanded: true,
+                          value: settingsController.country.value,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: getBoldTextStyle(
+                              fontSize: FontSize.xlarge, color: Colors.red),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          items:
+                              settingsController.countries.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            settingsController.country.value = newValue!;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: AppSize.size20),
+
+                      //Drop Down menu for city
+                      Obx(
+                        () => DropdownButton<String>(
+                          isExpanded: true,
+                          value: settingsController.city.value,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: getBoldTextStyle(
+                              fontSize: FontSize.xlarge, color: Colors.red),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          items: settingsController.cities.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            settingsController.city.value = newValue!;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: AppSize.size20),
+                      //Drop Down menu for countries
+                      //Drop Down menu for countries
+                      Obx(
+                        () => DropdownButton<String>(
+                          isExpanded: true,
+                          value: settingsController.area.value,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: getBoldTextStyle(
+                              fontSize: FontSize.xlarge, color: Colors.red),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          items: settingsController.areas.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            settingsController.area.value = newValue!;
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -516,7 +580,11 @@ class CityAreaPage extends StatelessWidget {
                     child: TextButton(
                         style:
                             TextButton.styleFrom(backgroundColor: Colors.white),
-                        onPressed: () => Get.offAll(() => HomeView()),
+                        onPressed: () {
+                          userSettings.setIsLogged = true;
+
+                          Get.offAll(() => HomeView());
+                        },
                         child: EaseTxt(
                           "Next",
                           color: Colors.blue,
@@ -531,7 +599,20 @@ class CityAreaPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
           },
-          future: settingsController.getData()),
+          future: Future.wait([
+            SettingsAPI().getCountries().then((value) {
+              settingsController.countries.value = value;
+              settingsController.country.value = value[0];
+            }),
+            SettingsAPI().getCities().then((value) {
+              settingsController.cities.value = value;
+              settingsController.city.value = value[0];
+            }),
+            SettingsAPI().getAreas().then((value) {
+              settingsController.areas.value = value;
+              settingsController.area.value = value[0];
+            })
+          ])),
     );
   }
 }

@@ -9,16 +9,22 @@ import 'package:tinkle/app/data/models/country_model.dart';
 import 'package:dio_logger/dio_logger.dart';
 
 class SettingsAPI {
-//get all countries from the api and save them in the list of countries
-  Future<List<String?>> getCountries() async {
+  //get all countries from the api and save them in the list of countries
+  Future<List<String>> getCountries() async {
     Dio dio = Dio();
     dio.interceptors.add(dioLoggerInterceptor);
     try {
       final response = await dio.post(
         "https://egyptsystem.com/api/countrys",
       );
-      final parsed = CountryModel.fromJson(response.data);
-      return parsed.data!.map((e) => e.title).toList();
+      print(CountryModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList());
+      return CountryModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList();
     } on DioError catch (e) {
       Get.snackbar(
         'Something went wrong',
@@ -28,19 +34,25 @@ class SettingsAPI {
       );
     }
 
-    return [];
+    return CountryModel().data!.map((e) => e.title.toString()).toList();
   }
 
 //get all citys from the api and save them in the list of citys
-  Future<List<String?>> getCities({String? CountryID}) async {
+  Future<List<String>> getCities({String? CountryID}) async {
     Dio dio = Dio();
     dio.interceptors.add(dioLoggerInterceptor);
     try {
       final response = await dio.post(
         "https://egyptsystem.com/api/citys",
       );
-      final parsed = CityModel.fromJson(response.data);
-      return parsed.data!.map((e) => e.title).toList();
+      print(CityModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList());
+      return CityModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList();
     } on DioError catch (e) {
       Get.snackbar(
         'Something went wrong',
@@ -49,19 +61,27 @@ class SettingsAPI {
         icon: Icon(Icons.error),
       );
     }
-    return [];
+
+    print(CityModel().data!.map((e) => e.title.toString()).toList());
+    return CityModel().data!.map((e) => e.title.toString()).toList();
   }
 
 //get all areas from the api and save them in the list of areas
-  Future<List<String?>> getAreas({String? CityID}) async {
+  Future<List<String>> getAreas({String? CityID}) async {
     Dio dio = Dio();
     dio.interceptors.add(dioLoggerInterceptor);
     try {
       final response = await dio.post(
         "https://egyptsystem.com/api/areas",
       );
-      final parsed = AreaModel.fromJson(response.data);
-      return parsed.data!.map((e) => e.title).toList();
+      print(AreaModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList());
+      return AreaModel.fromJson(response.data)
+          .data!
+          .map((e) => e.title.toString())
+          .toList();
     } on DioError catch (e) {
       Get.snackbar(
         'Something went wrong',
@@ -70,7 +90,8 @@ class SettingsAPI {
         icon: Icon(Icons.error),
       );
     }
-    return [];
+    print(AreaModel().data!.map((e) => e.title.toString()).toList());
+    return AreaModel().data!.map((e) => e.title.toString()).toList();
   }
 
 //send otp code to the phone number and return the otp code
@@ -82,7 +103,7 @@ class SettingsAPI {
           await dio.post("https://egyptsystem.com/api/user/register", data: {
         "mobile": phoneNumber,
       });
-      final parsed = CountryModel.fromJson(response.data);
+      return response.data;
     } on DioError catch (e) {
       Get.snackbar(
         'Something went wrong',
@@ -94,7 +115,7 @@ class SettingsAPI {
   }
 
   //verify the otp code
-  static Future<void> verifyOtp(
+  static Future<bool> verifyOtp(
       {String phoneNumber = "", String otpCode = ""}) async {
     Dio dio = Dio();
     dio.interceptors.add(dioLoggerInterceptor);
@@ -102,6 +123,7 @@ class SettingsAPI {
       final response = await dio.post(
         "https://egyptsystem.com/api/confirm/$phoneNumber/$otpCode",
       );
+      return response.data["statues"];
       //final parsed = CountryModel.fromJson(response.data);
     } on DioError catch (e) {
       Get.snackbar(
@@ -115,5 +137,6 @@ class SettingsAPI {
         ),
       );
     }
+    return false;
   }
 }
