@@ -42,7 +42,8 @@ class _MyAppState extends State<MyApp> {
           )
         ],
         initialBinding: Binding(),
-        initialRoute: AppPages.INITIAL,
+        initialRoute:
+            userSettings.getIsLogged != true ? Routes.SETTINGS : Routes.HOME,
         getPages: AppPages.routes,
         defaultTransition: Transition.size,
         debugShowCheckedModeBanner: false,

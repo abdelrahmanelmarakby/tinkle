@@ -3,8 +3,8 @@ import 'package:ease/ease.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:tinkle/app/modules/Companies/views/offers_view.dart';
 import 'package:tinkle/app/modules/categories/views/categories_view.dart';
-import 'package:tinkle/app/modules/offers/views/offers_view.dart';
 import 'package:tinkle/core/utils/assets.dart';
 import 'package:tinkle/core/utils/color_manger.dart';
 import 'package:tinkle/core/utils/values_manger.dart';
@@ -42,11 +42,11 @@ class HomeView extends GetView<HomeController> {
                     Assets.assetsList,
                     cacheHeight: 128,
                   ),
-                  title: "Offers",
+                  title: "Companies",
                   width: Get.width * .45,
                   height: Get.width * .6,
                 ),
-                openBuilder: (context, action) => OffersView(),
+                openBuilder: (context, action) => CompanyView(),
               ),
               HomeItem(
                 Image: Image.asset(

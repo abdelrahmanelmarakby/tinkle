@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:tinkle/app/data/models/categories_model.dart';
 
-class CategoriesApis {
-  static Future<CategoriesModel> getCategories() async {
+class CompanyApis {
+  static Future<CategoriesModel> getCompanies() async {
     Dio dio = new Dio();
     dio.interceptors.add(dioLoggerInterceptor);
 
     try {
-      Response response = await dio.get('https://egyptsystem.com/api/cater');
+      Response response = await dio.get('https://egyptsystem.com/api/company');
       return CategoriesModel.fromJson(response.data);
     } on DioError catch (e) {
       Get.snackbar(
@@ -23,13 +23,13 @@ class CategoriesApis {
     return CategoriesModel();
   }
 
-  static Future getOffersFromCategory(int id) async {
+  static Future getOffersFromCompany(int id) async {
     Dio dio = new Dio();
     dio.interceptors.add(dioLoggerInterceptor);
 
     try {
       Response response =
-          await dio.get('https://egyptsystem.com/api/category-offers/$id');
+          await dio.get('https://egyptsystem.com/api/company-offers/$id');
       return 0;
       //  return CategoriesModel.fromJson(response.data);
     } on DioError catch (e) {
