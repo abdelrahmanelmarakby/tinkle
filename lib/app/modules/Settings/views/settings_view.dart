@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:tinkle/app/data/api/settings_apis.dart';
+import 'package:tinkle/app/data/models/user_settings_model.dart';
 import 'package:tinkle/app/modules/home/views/home_view.dart';
 import 'package:tinkle/core/const.dart';
 import 'package:tinkle/core/global.dart';
@@ -14,6 +16,7 @@ import 'package:tinkle/core/utils/font_manger.dart';
 import 'package:tinkle/core/utils/styles_manger.dart';
 import 'package:tinkle/core/utils/values_manger.dart';
 import 'package:alt_sms_autofill/alt_sms_autofill.dart';
+import 'package:tinkle/core/widgets/toggle_button.dart';
 import '../controllers/settings_controller.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -37,7 +40,7 @@ class SettingsView extends GetView<SettingsController> {
           ),
         ),
         child: PageView(
-          // physics: NeverScrollableScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           controller: controller.pageController,
           children: [
             ChooseLangPage(),
@@ -481,6 +484,24 @@ class CityAreaPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
+                      ToggleIconBtnsFb1(
+                        selectedColor: Colors.white,
+                        multipleSelectionsAllowed: false,
+                        canUnToggle: false,
+                        icons: [
+                          EaseTxt(
+                            "Male",
+                            size: 18,
+                            weight: FontWeights.bold,
+                          ),
+                          EaseTxt(
+                            "Female",
+                            size: 18,
+                            weight: FontWeights.bold,
+                          )
+                        ],
+                        selected: (i) => print(i),
+                      ),
                       Obx(
                         () => DropdownButton<String>(
                           isExpanded: true,
@@ -581,7 +602,9 @@ class CityAreaPage extends StatelessWidget {
                         style:
                             TextButton.styleFrom(backgroundColor: Colors.white),
                         onPressed: () {
-                          userSettings.setIsLogged = true;
+                          GetStorage().write("islogged", true);
+                          print(GetStorage().read("islogged").toString() +
+                              " is USER LOGGED ?");
 
                           Get.offAll(() => HomeView());
                         },

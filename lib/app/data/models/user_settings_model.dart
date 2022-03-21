@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 class UserSettings {
-  bool isLogged;
+  late bool isLogged;
   Locale? language;
   String? countryCode;
   String? city;
@@ -10,99 +10,84 @@ class UserSettings {
   String? gender;
   String? phoneNumber;
   DateTime? birthDate;
-  static GetStorage _user = GetStorage("user");
-
   get getIsLogged {
-    return _user.read("islogged");
+    return GetStorage().read("islogged") ?? false;
   }
 
   set setIsLogged(isLogged) {
-    _user.write("islogged", this.isLogged).then((value) {
+    if (isLogged == null) print("CAN't ACCEPT NULL VALUE FROM IS LOGGED");
+    GetStorage().write("islogged", this.isLogged).then((value) {
       return value;
     });
   }
 
   get getLanguage {
-    return _user.read("language");
+    return GetStorage().read("language") ?? Locale("en", "US");
   }
 
   set setLanguage(language) {
-    _user.write("language", this.language).then((value) {
+    GetStorage().write("language", this.language).then((value) {
       return value;
     });
   }
 
   get getCountryCode {
-    return _user.read("countrycode");
+    return GetStorage().read("countrycode");
   }
 
   set setCountryCode(countryCode) {
-    _user.write("countrycode", this.countryCode).then((value) {
+    GetStorage().write("countrycode", this.countryCode).then((value) {
       return value;
     });
   }
 
   get getCity {
-    return _user.read("city");
+    return GetStorage().read("city");
   }
 
   set setCity(city) {
-    _user.write("city", this.city).then((value) {
+    GetStorage().write("city", this.city).then((value) {
       return value;
     });
   }
 
   get getArea {
-    return _user.read("area");
+    return GetStorage().read("area");
   }
 
   set setArea(Area) {
-    _user.write("area", this.area).then((value) {
+    GetStorage().write("area", this.area).then((value) {
       return value;
     });
   }
 
   get getGender {
-    return _user.read("gender");
+    return GetStorage().read("gender");
   }
 
   set setGender(Gender) {
-    _user.write("gender", this.gender).then((value) {
+    GetStorage().write("gender", this.gender).then((value) {
       return value;
     });
   }
 
   get getPhoneNumber {
-    return _user.read("phonenumber");
+    return GetStorage().read("phonenumber");
   }
 
   set setPhoneNumber(phoneNumber) {
-    _user.write("phonenumber", this.phoneNumber).then((value) {
+    GetStorage().write("phonenumber", this.phoneNumber).then((value) {
       return value;
     });
   }
 
   get getBirthDate {
-    return _user.read("birthdate");
+    return GetStorage().read("birthdate");
   }
 
   set setBirthDate(BirthDate) {
-    _user.write("birthdate", this.birthDate).then((value) {
+    GetStorage().write("birthdate", this.birthDate).then((value) {
       return value;
     });
   }
-
-  static void init() async {
-    _user = GetStorage("user");
-  }
-
-  UserSettings(
-      {this.isLogged = false,
-      this.language = const Locale("en", "US"),
-      this.countryCode = "20",
-      this.area = "mansoura",
-      this.city = "mansoura",
-      this.birthDate,
-      this.gender = "male",
-      this.phoneNumber = ""});
 }

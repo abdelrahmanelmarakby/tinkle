@@ -123,7 +123,7 @@ class SettingsAPI {
       final response = await dio.post(
         "https://egyptsystem.com/api/confirm/$phoneNumber/$otpCode",
       );
-      return response.data["statues"];
+      return response.data["status"] as bool;
       //final parsed = CountryModel.fromJson(response.data);
     } on DioError catch (e) {
       Get.snackbar(

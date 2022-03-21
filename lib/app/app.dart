@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:tinkle/app/data/models/user_settings_model.dart';
+import 'package:tinkle/app/modules/others/controlview.dart';
 import 'package:tinkle/core/global.dart';
 import 'package:tinkle/core/services/bindings_service.dart';
 import 'package:tinkle/core/services/notification_settings.dart';
@@ -42,8 +44,8 @@ class _MyAppState extends State<MyApp> {
           )
         ],
         initialBinding: Binding(),
-        initialRoute:
-            userSettings.getIsLogged != true ? Routes.SETTINGS : Routes.HOME,
+        home: ControlView(),
+
         getPages: AppPages.routes,
         defaultTransition: Transition.size,
         debugShowCheckedModeBanner: false,
@@ -52,9 +54,9 @@ class _MyAppState extends State<MyApp> {
         darkTheme: Themes.dark,
         themeMode: ThemeService().theme,
         translations: TranslationsService(), // your translations
-        locale: userSettings
+        locale: UserSettings()
             .language, // translations will be displayed in that locale
-        fallbackLocale: userSettings.language,
+        fallbackLocale: UserSettings().language,
         // specify the fallback locale in case an invalid locale is selected.
       ),
     );
